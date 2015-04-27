@@ -21,10 +21,11 @@ var ListItemStreamWrapper = React.createClass({
 var OSMFStream = React.createClass({
   embedSWF: function() {
 
-      thumbnail_url = stream_info.thumbnail_url
-      stream_info = this.props.stream_info
-      stream_url = stream_info.stream_url
-      stream_id = stream_info.stream_id
+      var stream_info = this.props.stream_info
+
+      var thumbnail_url = stream_info.thumbnail_url
+      var stream_url = stream_info.stream_url
+      var stream_id = stream_info.stream_id
 
       function jsbridge(playerId, event, data) {
         switch(event) {
@@ -85,9 +86,9 @@ var OSMFStream = React.createClass({
 var StreamList = React.createClass({
   render: function() {
 
-    stream_list = this.props.stream_list
-    live_list = stream_list.filter(isLive)
-    vod_list = stream_list.filter(isVOD)
+    var stream_list = this.props.stream_list
+    var live_list = stream_list.filter(isLive)
+    var vod_list = stream_list.filter(isVOD)
 
     return (
       <div className="streamLists">
@@ -110,9 +111,9 @@ var StreamList = React.createClass({
 
 $(".getStreams").click(function(){
 
-  KICKFLIP_API_URL = "./api"
+  var KICKFLIP_API_URL = "./api"
 
-  endpoint = KICKFLIP_API_URL + '/search'
+  var endpoint = KICKFLIP_API_URL + '/search'
   
   $.post(endpoint, {},
   function(data, status){
