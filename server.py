@@ -1,10 +1,10 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from flask import Flask
 from flask import request
 from flask import Response
 from flask import render_template
-from flask import stream_with_context
 from flask import send_from_directory
 
 from oauthlib.oauth2 import MobileApplicationClient
@@ -15,8 +15,14 @@ import json
 
 
 KICKFLIP_BASE_URL = "https://api.kickflip.io/"
-
 KICKFLIP_API_URL = "https://kickflip.io/api/1.1/"
+
+connected = False
+
+app = Flask(
+    __name__,
+    static_folder='public_html'
+)
 
 # Loads credentials from the secrets.json file.
 with open('secrets.json') as data_file:
@@ -25,9 +31,6 @@ with open('secrets.json') as data_file:
 
     KICKFLIP_CLIENT_ID = data['KICKFLIP_CLIENT_ID']
     KICKFLIP_CLIENT_SECRET = data['KICKFLIP_CLIENT_SECRET']
-
-
-connected = False
 
 
 def connect():
@@ -66,12 +69,6 @@ def connect():
         print "CONNECTED WITH CLIENT_ID", KICKFLIP_CLIENT_ID
 
     return connected
-
-
-app = Flask(
-    __name__,
-    static_folder='public_html'
-)
 
 
 @app.errorhandler(404)
