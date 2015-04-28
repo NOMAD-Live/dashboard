@@ -42,8 +42,9 @@ var OSMFStream = React.createClass({
 
       var parameters = {
           src: stream_url,
-          autoPlay: stream_info['length'] === 0,
+          autoPlay: isLive(stream_info),
           verbose: true,
+          volume: 0,
           controlBarAutoHide: true,
           controlBarPosition: "bottom",
           poster: thumbnail_url,
