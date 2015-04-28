@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/NOMAD-Live/nomad-live-dashboard.png?label=ready&title=Ready)](https://waffle.io/NOMAD-Live/nomad-live-dashboard)
 `nomad-live-dashboard`
 ======================
 
