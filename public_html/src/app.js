@@ -85,11 +85,46 @@ var OSMFStream = React.createClass({
 });
 
 var StreamList = React.createClass({
+  
+  updateStreamList: function() {
+
+    console.log("Updating stream list...")
+    
+    var KICKFLIP_API_URL = "./api"
+    var endpoint = KICKFLIP_API_URL + '/search'
+    var self = this;
+    $.post(endpoint, {},
+    function(data, status){
+      
+      if (status === "success") {
+
+        //console.log(data)
+
+        var newState = {
+          live_streams: data.streams.filter(isLive),
+          vod_streams: data.streams.filter(isVOD),
+        }
+
+        self.setState(newState)
+
+      } else {
+        console.log("Could not fetch stream list: " + status)
+      }
+
+    });
+  },
+  getInitialState: function() {
+    return {live_streams:[], vod_streams:[]};
+  },
+  componentDidMount: function() {
+    var REFRESH_RATE = 5000
+    this.updateStreamList()
+    setInterval(this.updateStreamList, REFRESH_RATE); // Call a method on the mixin
+  },
   render: function() {
 
-    var stream_list = this.props.stream_list
-    var live_list = stream_list.filter(isLive)
-    var vod_list = stream_list.filter(isVOD)
+    var live_list = this.state.live_streams
+    var vod_list = this.state.vod_streams
 
     return (
       <div className="streamLists">
@@ -110,21 +145,7 @@ var StreamList = React.createClass({
   }
 });
 
-$(".getStreams").click(function(){
-
-  var KICKFLIP_API_URL = "./api"
-
-  var endpoint = KICKFLIP_API_URL + '/search'
-  
-  $.post(endpoint, {},
-  function(data, status){
-    
-    console.log(data)
-    
-    React.render(
-      <StreamList stream_list={data.streams} />,
-      document.getElementById('streams')
-    );
-
-  });
-});
+React.render(
+  <StreamList />,
+  document.getElementById('streams')
+);
