@@ -46,6 +46,7 @@ var OSMFStream = React.createClass({
           verbose: true,
           volume: 0,
           controlBarAutoHide: true,
+          controlBarAutoHideTimeout: 0,
           controlBarPosition: "bottom",
           poster: thumbnail_url,
           javascriptCallbackFunction: "jsbridge",
