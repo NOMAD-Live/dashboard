@@ -11,7 +11,7 @@ function isVOD(stream) {
 var ListItemStreamWrapper = React.createClass({
   render: function() {
     return (
-      <div className="col-sm-4 streamItem">
+      <div className="streamItem">
         <OSMFStream {...this.props} />
       </div>
     );
@@ -88,17 +88,15 @@ var StreamList = React.createClass({
   
   updateStreamList: function() {
 
-    console.log("Updating stream list...")
-    
     var KICKFLIP_API_URL = "./api"
     var endpoint = KICKFLIP_API_URL + '/search'
+    
     var self = this;
+    
     $.post(endpoint, {},
     function(data, status){
       
       if (status === "success") {
-
-        //console.log(data)
 
         var newState = {
           live_streams: data.streams.filter(isLive),
@@ -117,9 +115,9 @@ var StreamList = React.createClass({
     return {live_streams:[], vod_streams:[]};
   },
   componentDidMount: function() {
-    var REFRESH_RATE = 5000
+    var REFRESH_RATE = 10000
     this.updateStreamList()
-    setInterval(this.updateStreamList, REFRESH_RATE); // Call a method on the mixin
+    setInterval(this.updateStreamList, REFRESH_RATE);
   },
   render: function() {
 
@@ -129,13 +127,15 @@ var StreamList = React.createClass({
     return (
       <div className="streamLists">
         <h1>Present</h1>
-        <div className="row liveStreamList">
+        <hr/>
+        <div className="center liveStreamList">
           {live_list.map(function(e) {
              return <ListItemStreamWrapper key={e.stream_id} stream_info={e}/>;
           })}
         </div>
         <h1>Past</h1>
-        <div className="row vodStreamList">
+        <hr/>
+        <div className="center vodStreamList">
           {vod_list.map(function(e) {
              return <ListItemStreamWrapper key={e.stream_id} stream_info={e}/>;
           })}
