@@ -11,8 +11,8 @@ Create a secrets.json file with the correct credentials from kickflip.io :
 	"KICKFLIP_CLIENT_ID" : "_YPOGaq7!ge2UT30h8ECKFyB45h6k;dPH-4qqw6d",
 	"KICKFLIP_CLIENT_SECRET" : "-@YHm0TKVC60f-jTwz0jFBgupaXAzfE_fJQz@ko7dwTVKeMmD-DhE.C!TzqemN.==.6tj2pId6o1fiSxjoWAmt2@ImBg7MZOuENx8H:D!4rI3t;3dfWL3BpA6Ow.TkJv"
 }
-
 ```
+
 Then run the server with `python server.py`.
 
 
