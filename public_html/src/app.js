@@ -34,11 +34,9 @@ var OSMFStream = React.createClass({
           case "progress":
             break;
           default:
-            console.log(event, data);
+            console.log(event + ":" + data);
         }
       }
-
-      var wmodeOptions = ["direct", "opaque", "transparent", "window"];
 
       var parameters = {
           src: stream_url,
@@ -53,6 +51,8 @@ var OSMFStream = React.createClass({
           plugin_hls: "https://s3.amazonaws.com/kickflip-static/swf/HLSProviderOSMF.swf"
       };
 
+      var wmodeOptions = ["direct", "opaque", "transparent", "window"];
+      
       //Embed the player SWF:              
       swfobject.embedSWF(
         "https://s3.amazonaws.com/kickflip-static/swf/StrobeMediaPlayback.swf",
@@ -64,7 +64,7 @@ var OSMFStream = React.createClass({
         parameters,
         {
           allowFullScreen: true,
-          wmode: "direct",
+          wmode: wmodeOptions[0],
           allowscriptaccess: "always",
           scale: "exactFit",
           menu: false
