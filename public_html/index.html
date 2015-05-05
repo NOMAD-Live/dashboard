@@ -12,6 +12,8 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.min.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+  <script type="text/javascript" src="https://cdn.cine.io/cineio-broadcast.js"></script>
+
   
   <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   <link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -45,6 +47,10 @@
 
 <body>
 
+  <div class="center">
+    <div id="mainPlayer"></div>
+  </div>
+
   <div id="streams" class="container-fluid"></div>
   <div id="main"></div>
   
@@ -52,6 +58,39 @@
   
 
   <script type="text/javascript">
+  var CINE_IO_PUBLIC_KEY = "009d6ee9b26138c215803e644a90e739";
+  var streamId = "553e46f75484820b000bb76e";
+  var domId = "mainPlayer";
+
+  CineIO.init(CINE_IO_PUBLIC_KEY, {});
+
+  var playOptions = {
+    stretching: 'uniform',
+    width: "50%",
+    aspectratio: '16:9',
+    primary: 'flash',
+    autostart: true,
+    metaData: true,
+    mute: false,
+    controls: true
+  };
+
+  CineIO.play(streamId, domId, playOptions);
+
+  // Is not accessible within the 
+  // javascriptCallbackFunction scope.
+  function jsbridge(playerId, event, data) {
+    switch(event) {
+      case "timeChange":
+      case "timeupdate":
+      case "progress":
+        break;
+      default:
+        console.log(event + ":");
+        console.log(data);
+    }
+  }
+
   function isApple() {
     return (
       (navigator.platform.indexOf("iPhone") !== -1) ||

@@ -27,17 +27,6 @@ var OSMFStream = React.createClass({
       var stream_url = stream_info.stream_url
       var stream_id = stream_info.stream_id
 
-      function jsbridge(playerId, event, data) {
-        switch(event) {
-          case "timeChange":
-          case "timeupdate":
-          case "progress":
-            break;
-          default:
-            console.log(event + ":" + data);
-        }
-      }
-
       var parameters = {
           src: stream_url,
           autoPlay: isLive(stream_info),
@@ -57,8 +46,8 @@ var OSMFStream = React.createClass({
       swfobject.embedSWF(
         "https://s3.amazonaws.com/kickflip-static/swf/StrobeMediaPlayback.swf",
         stream_id,
-        360,
-        240,
+        180,
+        120,
         "10.1.0",
         "https://s3.amazonaws.com/kickflip-static/swf/expressInstall.swf",
         parameters,
