@@ -26,7 +26,7 @@ var CineIOStream = React.createClass({
     )
   }
 });
-window.CineIOStream = CineIOStream;
+
 
 var MainStream = React.createClass({
     render: function () {
@@ -37,4 +37,3 @@ var MainStream = React.createClass({
     )
   }
 });
-window.MainStream = MainStream;
