@@ -10,7 +10,7 @@
   <meta name="author" content="">
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.2/JSXTransformer.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.2/react.js"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
   <script type="text/javascript" src="https://cdn.cine.io/cineio-broadcast.js"></script>
 
@@ -47,35 +47,16 @@
 
 <body>
 
-  <div class="center">
-    <div id="mainPlayer"></div>
-  </div>
+  <div id="mainPlayer"></div>
 
   <div id="streams" class="container-fluid"></div>
   <div id="main"></div>
   
+  <script type="text/jsx" src="./src/cineio-ui.js"></script>
   <script type="text/jsx" src="./src/app.js"></script>
   
 
   <script type="text/javascript">
-  var CINE_IO_PUBLIC_KEY = "009d6ee9b26138c215803e644a90e739";
-  var streamId = "553e46f75484820b000bb76e";
-  var domId = "mainPlayer";
-
-  CineIO.init(CINE_IO_PUBLIC_KEY, {});
-
-  var playOptions = {
-    stretching: 'uniform',
-    width: "50%",
-    aspectratio: '16:9',
-    primary: 'flash',
-    autostart: true,
-    metaData: true,
-    mute: false,
-    controls: true
-  };
-
-  CineIO.play(streamId, domId, playOptions);
 
   // Is not accessible within the 
   // javascriptCallbackFunction scope.
@@ -89,23 +70,6 @@
         console.log(event + ":");
         console.log(data);
     }
-  }
-
-  function isApple() {
-    return (
-      (navigator.platform.indexOf("iPhone") !== -1) ||
-      (navigator.platform.indexOf("iPod") !== -1) ||
-      (navigator.userAgent.indexOf("Safari") > -1 && navigator.userAgent.indexOf("Chrom") === -1)
-    );
-  }
-
-  if (!isApple()) {
-
-  } else {
-
-    var src_string = "https://d3sa2dsf6xa6d8.cloudfront.net/nomad-alpha/bej48snvvthy/e83a515e-fe69-4b19-afba-20f30d56b719/vod.m3u8";
-    $('#v_player').removeClass('hidden');
-    $('#v_source').attr('src', src_string).detach().appendTo("#v_player");
   }
   </script>
 </body>
