@@ -1,10 +1,14 @@
-var CINE_IO_PUBLIC_KEY = "009d6ee9b26138c215803e644a90e739";
-var streamId = "553e46f75484820b000bb76e";
-var domId = "mainPlayer";
+var CINE_IO_PUBLIC_KEY = "196634661c8541dc5b188255cdc16cbf";
+var streamId = "554cf071fc71760b00a78aad";
 
 CineIO.init(CINE_IO_PUBLIC_KEY, {});
 
+// React.render(
+//   <MainStream streamId={streamId}/>,
+//   document.getElementById('mainPlayer')
+// );
+
 React.render(
-  <MainStream streamId={streamId}/>,
-  document.getElementById('mainPlayer')
+  <Project />,
+  document.getElementById('streams')
 );
