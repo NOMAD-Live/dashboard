@@ -2,6 +2,9 @@
 `nomad-live-dashboard`
 ======================
 
+You can access the dashboard at http://nomad-live.github.io/nomad-live-dashboard/public_html/
+
+
 ### ~~How To Run~~ (Switched to Cine.IO)
 
 Create a secrets.json file with the correct credentials from kickflip.io (those won't work) :
