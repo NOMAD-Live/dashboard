@@ -1,3 +1,5 @@
+'use strict';
+
 var CineIOStream = React.createClass({
   playStream: function () {
     var id = this.state.stream.id;

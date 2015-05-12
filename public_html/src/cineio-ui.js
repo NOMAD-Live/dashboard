@@ -6,16 +6,16 @@ var Project = React.createClass({
 
     $.ajax({
       url: endpoint,
-      dataType: 'jsonp',
       type: 'POST',
+      dataType: 'jsonp',
       data: {secretKey:secretKey.value},
       success: function(data) {
+        console.log("Project: Just got new streams.");
         this.setState({streams: data});
-        console.log("AAAAA");
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(endpoint, status, err.toString());
-      }.bind(this)
+      }.bind(this),
     });
   },
   getInitialState: function () {
@@ -57,8 +57,8 @@ var SimpleSubmit = React.createClass({
   render: function () {
     var project_secret_key = localStorage.getItem("project_secret_key");
     return (
-      <div className="project settings">
-        <input type="text" ref="textfield" defaultValue={project_secret_key} />
+      <div className="project settings center">
+        <input type="text" size="36" maxLength="32" ref="textfield" defaultValue={project_secret_key} />
         <button onClick={this.updateContent} >Update</button>
       </div>
     )
