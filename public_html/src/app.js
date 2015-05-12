@@ -4,7 +4,7 @@ var streamId = "554cf071fc71760b00a78aad";
 CineIO.init(CINE_IO_PUBLIC_KEY, {});
 
 // React.render(
-//   <MainStream streamId={streamId}/>,
+//   <MainStream stream={{id:streamId}}/>,
 //   document.getElementById('mainPlayer')
 // );
 
