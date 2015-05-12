@@ -14,7 +14,7 @@ var CineIOStream = React.createClass({
       autostart: true,
       metaData: true,
       mute: false,
-      controls: true
+      controls: true,
     };
 
     var playOptions = this.state.playOptions || defaultPlayOptions;
@@ -68,7 +68,7 @@ var CineIOAPIStream = React.createClass({
       autostart: true,
       metaData: true,
       mute: true,
-      controls: false
+      controls: false,
     };
     return (
       <div className="cineio-stream">

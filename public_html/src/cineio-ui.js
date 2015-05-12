@@ -24,9 +24,7 @@ var Project = React.createClass({
   render: function () {
     return (
       <div className="project">
-        <SimpleSubmit
-          placeholder="Project Secret Key"
-          onContentUpdate={this.fetchWithKey} />
+        <SimpleSubmit onContentUpdate={this.fetchWithKey} />
         <hr/>
         <div className="stream-list">
           {this.state.streams.map(function(e) {
@@ -58,7 +56,9 @@ var SimpleSubmit = React.createClass({
     var project_secret_key = localStorage.getItem("project_secret_key");
     return (
       <div className="project settings center">
-        <input type="text" size="36" maxLength="32" ref="textfield" defaultValue={project_secret_key} />
+        <input type="text" size="36" maxLength="32" ref="textfield" 
+          placeholder="Project Secret Key"
+          defaultValue={project_secret_key} />
         <button onClick={this.updateContent} >Update</button>
       </div>
     )
