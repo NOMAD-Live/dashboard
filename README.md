@@ -2,9 +2,9 @@
 `nomad-live-dashboard`
 ======================
 
-### How To Run
+### ~~How To Run~~ (Switched to Cine.IO)
 
-Create a secrets.json file with the correct credentials from kickflip.io :
+Create a secrets.json file with the correct credentials from kickflip.io (those won't work) :
 
 ```json
 {
