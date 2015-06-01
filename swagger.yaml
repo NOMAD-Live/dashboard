@@ -139,6 +139,12 @@ paths:
         Get streams of the matching user.
       parameters:
 
+        - name: user_id
+          in: path
+          description: ID of the requested user.
+          required: true
+          type: string
+
         - name: page
           in: query
           description: Page to get from the requested query.
@@ -159,6 +165,7 @@ paths:
 
       tags:
         - Streams
+        - Users
       responses:
         200:
           description: An array of streams.
@@ -296,7 +303,7 @@ paths:
           type: string
 
       tags:
-        - Users
+        - Streams
       responses:
         201:
           description: A User object including the user_id.
@@ -308,7 +315,7 @@ paths:
             $ref: '#/definitions/Error'
 
     get:
-      summary: User Informations List
+      summary: Stream Informations List
       description: |
         Get information on existing streams.
         Needs at least a username, a user_id, or a stream_id.
@@ -342,7 +349,7 @@ paths:
             type: string
 
       tags:
-        - Users
+        - Streams
       responses:
         200:
           description: An array of users.
@@ -385,8 +392,8 @@ paths:
           description: Timestamp of the geo-location (as per RFC3339).
 
       tags:
-        - Streams
         - Geolocations
+        - Streams
       responses:
         200:
           description: An array of geo-locations
