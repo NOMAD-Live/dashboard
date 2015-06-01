@@ -132,6 +132,44 @@ paths:
             $ref: '#/definitions/Error'
 
 
+  /users/{user_id}/streams:
+    get:
+      summary: User's Streams
+      description: |
+        Get streams of the matching user.
+      parameters:
+
+        - name: page
+          in: query
+          description: Page to get from the requested query.
+          required: false
+          type: integer
+
+        - name: fields
+          in: query
+          description: Specify fields to return in the reply.
+          required: false
+          type: string
+
+        - name: sort
+          in: query
+          description: Specify how to sort the reply.
+          required: false
+          type: string
+
+      tags:
+        - Streams
+      responses:
+        200:
+          description: An array of streams.
+          schema:
+            $ref: '#/definitions/Streams'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+
   /search/users:
     get:
       summary: User Search
