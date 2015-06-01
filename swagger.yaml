@@ -46,7 +46,7 @@ paths:
           in: query
           description: Email address of the new user.
           required: false
-          type: email
+          type: string
 
         - name: extra_info
           in: query
@@ -86,7 +86,7 @@ paths:
           required: false
           type: array
           items:
-            type: uuid
+            type: string
 
       tags:
         - Users
@@ -115,7 +115,7 @@ paths:
           in: path
           description: ID of the requested user.
           required: true
-          type: uuid
+          type: string
 
       tags:
         - Users
@@ -130,7 +130,7 @@ paths:
             $ref: '#/definitions/Error'
 
 
-/search/users:
+  /search/users:
     get:
       summary: User Search
       description: |
@@ -175,8 +175,6 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-
-
   /users/{user_id}/report_spam:
     get:
       summary: Flag User for Spam
@@ -192,10 +190,9 @@ paths:
           type: string
 
         - name: user_id
-          in: query
+          in: path
           description: IDs of the requested user.
-          required: false
-          type: uuid
+          type: string
 
       tags:
         - Users
@@ -290,7 +287,7 @@ paths:
           type: array
           collectionFormat: csv
           items:
-            type: uuid
+            type: string
 
         - name: stream_id
           in: query
@@ -299,16 +296,14 @@ paths:
           type: array
           collectionFormat: csv
           items:
-            type: uuid
+            type: string
       tags:
         - Users
       responses:
         200:
           description: An array of users.
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/User'
+            $ref: '#/definitions/Users'
         default:
           description: Unexpected error
           schema:
@@ -318,12 +313,14 @@ paths:
   /streams/{stream_id}/location:
     put:
       summary: Geo Location List
-      description: 
+      description: |
+        A list of timestamped locations stored while
+        the video is recorded.
       parameters:
 
         - name: stream_id
           in: path
-          type: uuid
+          type: string
           description: Unique stream identifier.
 
         - name: lat
@@ -340,7 +337,7 @@ paths:
 
         - name: time
           in: query
-          type: dateTime
+          type: string
           description: Timestamp of the geo-location (as per RFC3339).
 
       tags:
@@ -352,14 +349,14 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Geolocations'
+              $ref: '#/definitions/Geolocation'
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
 
 
-/search/streams:
+  /search/streams:
     get:
       summary: Stream Search
       description: |
@@ -404,9 +401,7 @@ paths:
         200:
           description: An array of streams.
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Stream'
+            $ref: '#/definitions/Streams'
         default:
           description: Unexpected error
           schema:
@@ -444,13 +439,12 @@ definitions:
       name:
         type: string
         description: Friendly display name of stream.
-      play:
-        rtmp:
-          type: string
-          description: RTMP url to view the stream.
-        hls:
-          type: string
-          description: HLS url to view the stream.
+      rtmp_url:
+        type: string
+        description: RTMP url to view the stream.
+      hls_url:
+        type: string
+        description: HLS url to view the stream.
       publish:
         type: string
         description: Image URL representing the product.
@@ -536,6 +530,20 @@ definitions:
         items:
           $ref: '#/definitions/User'
 
+  Geolocation:
+    properties:
+      lat:
+        type: number
+        format: double
+        description: Latitude component of location.
+      lon:
+        type: number
+        format: double
+        description: Longitude component of location.
+      time:
+        type: string
+        format: dateTime
+        description: Timestamp of the geo-location (as per RFC3339).
   Error:
     properties:
       code:
@@ -545,3 +553,4 @@ definitions:
         type: string
       fields:
         type: string
+
