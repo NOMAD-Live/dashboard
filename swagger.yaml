@@ -21,7 +21,7 @@ paths:
     post:
       summary: Create New User
       description: |
-        Blabla.
+        Endpoint to create/fetch users
       parameters:
 
         - name: username
@@ -35,6 +35,7 @@ paths:
           description: Password associated to the new user.
           required: true
           type: string
+          format: password
 
         - name: display_name
           in: query
@@ -53,6 +54,7 @@ paths:
           description: Some more info as `json`.
           required: false
           type: string
+
       tags:
         - Users
       responses:
@@ -68,7 +70,7 @@ paths:
     get:
       summary: User Informations List
       description: |
-        Get information of existing users.
+        Get information on existing users.
         Needs at least a username or a user_id.
       parameters:
 
@@ -175,6 +177,8 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+
+
   /users/{user_id}/report_spam:
     get:
       summary: Flag User for Spam
@@ -252,6 +256,7 @@ paths:
           description: Some more info as `json`.
           required: false
           type: string
+
       tags:
         - Users
       responses:
@@ -297,6 +302,7 @@ paths:
           collectionFormat: csv
           items:
             type: string
+
       tags:
         - Users
       responses:
