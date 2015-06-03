@@ -10,5 +10,5 @@ CineIO.init(CINE_IO_PUBLIC_KEY, {});
 
 React.render(
   <Project />,
-  document.getElementById('streams')
+  document.getElementById('project')
 );
