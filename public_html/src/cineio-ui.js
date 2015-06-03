@@ -23,10 +23,11 @@ var Project = React.createClass({
   },
   render: function () {
     return (
-      <div className="project">
+      <div className={"project " + this.props.className}>
+        <hr/>
         <SimpleSubmit onContentUpdate={this.fetchWithKey} />
         <hr/>
-        <div className="stream-list">
+        <div className={"stream-list " + this.props.className}>
           {this.state.streams.map(function(e) {
              return <CineIOAPIStream key={e.id} stream={e}/>;
           })}
