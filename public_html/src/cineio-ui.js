@@ -10,7 +10,7 @@ var Project = React.createClass({
       dataType: 'jsonp',
       data: {secretKey:secretKey.value},
       success: function(data) {
-        console.log("Project: Just got new streams.");
+        console.log("Project:newStreams.");
         this.setState({streams: data});
       }.bind(this),
       error: function(xhr, status, err) {
@@ -25,7 +25,7 @@ var Project = React.createClass({
     return (
       <div className={"project " + this.props.className}>
         <hr/>
-        <SimpleSubmit onContentUpdate={this.fetchWithKey} />
+        <SimpleSubmit onSubmit={this.fetchWithKey} />
         <hr/>
         <div className={"stream-list " + this.props.className}>
           {this.state.streams.map(function(e) {
@@ -44,22 +44,29 @@ var SimpleSubmit = React.createClass({
     var text = React.findDOMNode(this.refs.textfield).value.trim();
     
     // Do nothing if no value
-    if (!text) { console.log("SimpleSubmit: No content."); return; }
+    if (!text) { console.log("SimpleSubmit:noContent"); return; }
     
-    if (this.props.onContentUpdate) {
-      console.log("SimpleSubmit:onContentUpdate");
-      this.props.onContentUpdate({value: text});
+    if (this.props.onSubmit) {
+      console.log("SimpleSubmit:onSubmit");
+      this.props.onSubmit({value: text});
     }
 
     localStorage.setItem("project_secret_key", text); // save the item
   },
   render: function () {
-    var project_secret_key = localStorage.getItem("project_secret_key");
+    
+    function get_project_secret_key() {
+      // http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+      var local = localStorage.getItem("project_secret_key");
+      var half = location.search.split("key" + '=')[1];
+      return half !== undefined ? decodeURIComponent(half.split('&')[0]) : local;
+    }
+
     return (
       <div className="project settings center">
         <input type="text" size="36" maxLength="32" ref="textfield" 
           placeholder="Project Secret Key"
-          defaultValue={project_secret_key} />
+          defaultValue={get_project_secret_key()} />
         <button onClick={this.updateContent} >Update</button>
       </div>
     )
