@@ -53,6 +53,14 @@ var SimpleSubmit = React.createClass({
 
     localStorage.setItem("project_secret_key", text); // save the item
   },
+  componentDidMount: function() {
+
+    var text = React.findDOMNode(this.refs.textfield).value.trim();
+    
+    if (text) {
+      this.updateContent();
+    }
+  },
   render: function () {
     
     function get_project_secret_key() {
