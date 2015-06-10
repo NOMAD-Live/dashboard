@@ -1,7 +1,7 @@
 'use strict';
 
 var Project = React.createClass({
-  fetchWithKey: function (secretKey) {
+  fetchWithKey: function (secretKey, callback) {
     var endpoint = "https://www.cine.io/api/1/-/streams";
 
     $.ajax({
@@ -12,9 +12,14 @@ var Project = React.createClass({
       success: function(data) {
         console.log("Project:newStreams.");
         this.setState({streams: data});
+
+        // Executes the callback if present
+        typeof callback === 'function' && callback();
+
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(endpoint, status, err.toString());
+        typeof callback === 'function' && callback(err);
       }.bind(this),
     });
   },
@@ -39,43 +44,81 @@ var Project = React.createClass({
 
 
 var SimpleSubmit = React.createClass({
+  getProjectSecretKey: function() {
+    // http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+    var local = localStorage.getItem("project_secret_key");
+    var half = location.search.split("key" + '=')[1];
+    return half !== undefined ? decodeURIComponent(half.split('&')[0]) : local;
+  },
+  onUpdateContentDone: function (err) {
+    if (err) {
+      this.setState({status:'error'});
+    } else {
+    this.setState({status:'success'});
+    }
+  },
   updateContent: function (e) {
     
     var text = React.findDOMNode(this.refs.textfield).value.trim();
-    
+
     // Do nothing if no value
     if (!text) { console.log("SimpleSubmit:noContent"); return; }
     
     if (this.props.onSubmit) {
+
       console.log("SimpleSubmit:onSubmit");
-      this.props.onSubmit({value: text});
+
+      // Shows loading
+      this.setState({status:'loading'});
+      this.props.onSubmit({value: text}, this.onUpdateContentDone);
     }
 
-    localStorage.setItem("project_secret_key", text); // save the item
+    // Save the item (even if the key is invalid)
+    localStorage.setItem("project_secret_key", text);
+  },
+  getInitialState: function() {
+    return {status:'iddle'};
   },
   componentDidMount: function() {
 
     var text = React.findDOMNode(this.refs.textfield).value.trim();
     
+    // Auto update if there is a value in the text field
     if (text) {
       this.updateContent();
     }
   },
   render: function () {
-    
-    function get_project_secret_key() {
-      // http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-      var local = localStorage.getItem("project_secret_key");
-      var half = location.search.split("key" + '=')[1];
-      return half !== undefined ? decodeURIComponent(half.split('&')[0]) : local;
-    }
-
     return (
       <div className="project settings center">
-        <input type="text" size="36" maxLength="32" ref="textfield" 
+        <input type="text" size="36" maxLength="32" ref="textfield"
           placeholder="Project Secret Key"
-          defaultValue={get_project_secret_key()} />
-        <button onClick={this.updateContent} >Update</button>
+          defaultValue={this.getProjectSecretKey()} />
+        <button onClick={this.updateContent} ref="submitButton">Update</button>
+        <StatusIndicator status={this.state.status} ref="status"></StatusIndicator>
+      </div>
+    )
+  }
+});
+
+var StatusIndicator = React.createClass({
+  getDefaultProps: function() {
+    return {
+      states: {
+        'iddle': '<i class="fa fa-paper-plane status iddle" ></i>',
+        'loading': '<i class="fa fa-refresh status loading" ></i>',
+        'success': '<i class="fa fa-check-circle status success" ></i>',
+        'error': '<i class="fa fa-exclamation-circle status error" ></i>',
+      }
+    };
+  },
+  render: function () {
+    var html = this.props.states[this.props.status];
+    if (!html) {
+      console.log("StatusIndicator:warning: Injecting empty HTML.");
+    }
+    return (
+      <div className="status-indicator" dangerouslySetInnerHTML={{__html: html}}>
       </div>
     )
   }
