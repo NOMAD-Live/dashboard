@@ -54,7 +54,12 @@ var SimpleSubmit = React.createClass({
     if (err) {
       this.setState({status:'error'});
     } else {
-    this.setState({status:'success'});
+      this.setState({status:'success'});
+    }
+  },
+  handleEnterKey: function(e) {
+    if (e && e.keyCode == 13) {
+      React.findDOMNode(this.refs.submitButton).click();
     }
   },
   updateContent: function (e) {
@@ -92,9 +97,10 @@ var SimpleSubmit = React.createClass({
     return (
       <div className="project settings center">
         <input type="text" size="36" maxLength="32" ref="textfield"
+          onKeyUp={this.handleEnterKey}
           placeholder="Project Secret Key"
           defaultValue={this.getProjectSecretKey()} />
-        <button onClick={this.updateContent} ref="submitButton">Update</button>
+        <button onClick={this.updateContent} ref="submitButton">Refresh</button>
         <StatusIndicator status={this.state.status} ref="status"></StatusIndicator>
       </div>
     )
