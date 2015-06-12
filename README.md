@@ -2,7 +2,7 @@
 `nomad-live-dashboard`
 ======================
 
-You can access the dashboard at http://nomad-live.github.io/nomad-live-dashboard/public_html/
+You can access the dashboard at http://nomad-live.github.io/nomad-live-dashboard/
 
 
 ### ~~How To Run~~ (Switched to Cine.IO)
