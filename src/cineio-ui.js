@@ -53,11 +53,13 @@ var SimpleSubmit = React.createClass({
   onUpdateContentDone: function (err) {
     if (err) {
       this.setState({status:'error'});
+      this.setAutoUpdate(false);
     } else {
       this.setState({status:'success'});
+      this.setAutoUpdate(true);
     }
   },
-  handleEnterKey: function(e) {
+  handleEnterKey: function (e) {
     if (e && e.keyCode == 13) {
       React.findDOMNode(this.refs.submitButton).click();
     }
@@ -80,6 +82,30 @@ var SimpleSubmit = React.createClass({
 
     // Save the item (even if the key is invalid)
     localStorage.setItem("project_secret_key", text);
+  },
+  setAutoUpdate: function (value) {
+    var REFRESH_RATE = 5000;
+    
+    if (value === true) {
+      
+      // Do nothing if the interval is already set
+      if (this._interval) return;
+
+      this._interval = setInterval(function () {
+        this.updateContent();
+      }.bind(this), REFRESH_RATE);
+
+    } else {
+      clearTimeout(this._interval);
+    }
+  },
+  handleLeave: function () {
+    // Clear the timeout for opening the widget
+    clearTimeout(this._interval); 
+  },
+  componentWillUnmount: function(){
+    // Clear the timeout when the component unmounts
+    clearTimeout(this._interval); 
   },
   getInitialState: function() {
     return {status:'iddle'};
