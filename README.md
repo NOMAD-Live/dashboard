@@ -1,8 +1,8 @@
-[![Stories in Ready](https://badge.waffle.io/NOMAD-Live/nomad-live-dashboard.png?label=ready&title=Ready)](https://waffle.io/NOMAD-Live/nomad-live-dashboard)
-`nomad-live-dashboard`
-======================
+[![Stories in Ready](https://badge.waffle.io/NOMAD-Live/dashboard.png?label=ready&title=Ready)](https://waffle.io/NOMAD-Live/dashboard)
+`dashboard`
+===========
 
-You can access the dashboard at http://nomad-live.github.io/nomad-live-dashboard/
+You can access the dashboard at http://nomad-live.github.io/dashboard/
 
 
 ### ~~How To Run~~ (Switched to Cine.IO)
