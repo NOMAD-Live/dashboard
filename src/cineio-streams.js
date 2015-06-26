@@ -68,7 +68,7 @@ var CineIOAPIStream = React.createClass({
       autostart: true,
       metaData: true,
       mute: true,
-      controls: false,
+      controls: true,
     };
     return (
       <div className="cineio-stream stream-item">
