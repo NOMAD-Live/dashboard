@@ -1,7 +1,7 @@
 'use strict';
 
 function isLive(stream) {
-    return stream.length === 0;
+  return stream.length === 0;
 }
 
 function isVOD(stream) {
@@ -9,7 +9,7 @@ function isVOD(stream) {
 }
 
 var ListItemStreamWrapper = React.createClass({
-  render: function() {
+  render: function () {
     return (
       <div className="streamItem">
         <OSMFStream {...this.props} />
@@ -19,7 +19,7 @@ var ListItemStreamWrapper = React.createClass({
 });
 
 var OSMFStream = React.createClass({
-  embedSWF: function() {
+  embedSWF: function () {
 
       var stream_info = this.props.stream_info
 
@@ -61,7 +61,7 @@ var OSMFStream = React.createClass({
       );
   },
 
-  render: function() {
+  render: function () {
     return (
       <object id={this.props.stream_info.stream_id}>
         <embed src="https://s3.amazonaws.com/kickflip-static/swf/StrobeMediaPlayback.swf"
@@ -69,14 +69,14 @@ var OSMFStream = React.createClass({
       </object>
     );
   },
-  componentDidMount: function() {
+  componentDidMount: function () {
     this.embedSWF();
   }
 });
 
 var StreamList = React.createClass({
   
-  updateStreamList: function() {
+  updateStreamList: function () {
 
     var KICKFLIP_API_URL = "./api"
     var endpoint = KICKFLIP_API_URL + '/search'
@@ -84,7 +84,7 @@ var StreamList = React.createClass({
     var self = this;
     
     $.post(endpoint, {},
-    function(data, status){
+    function (data, status){
       
       if (status === "success") {
 
@@ -101,15 +101,15 @@ var StreamList = React.createClass({
 
     });
   },
-  getInitialState: function() {
+  getInitialState: function () {
     return {live_streams:[], vod_streams:[]};
   },
-  componentDidMount: function() {
+  componentDidMount: function () {
     var REFRESH_RATE = 10000
     this.updateStreamList()
     setInterval(this.updateStreamList, REFRESH_RATE);
   },
-  render: function() {
+  render: function () {
 
     var live_list = this.state.live_streams
     var vod_list = this.state.vod_streams
@@ -119,14 +119,14 @@ var StreamList = React.createClass({
         <h1>Present</h1>
         <hr/>
         <div className="center liveStreamList">
-          {live_list.map(function(e) {
+          {live_list.map(function (e) {
              return <ListItemStreamWrapper key={e.stream_id} stream_info={e}/>;
           })}
         </div>
         <h1>Past</h1>
         <hr/>
         <div className="center vodStreamList">
-          {vod_list.map(function(e) {
+          {vod_list.map(function (e) {
              return <ListItemStreamWrapper key={e.stream_id} stream_info={e}/>;
           })}
         </div>
