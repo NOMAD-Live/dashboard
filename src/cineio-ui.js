@@ -29,14 +29,71 @@ var Project = React.createClass({
   render: function () {
     return (
       <div className={"project " + this.props.className}>
-        <hr/>
-        <SimpleSubmit onSubmit={this.fetchWithKey} />
-        <hr/>
+        <div className="project settings">
+          <SimpleSubmit onSubmit={this.fetchWithKey} />
+          <NomadApiInterface />
+        </div>
         <div className={"stream-list " + this.props.className}>
           {this.state.streams.map(function(e) {
              return <CineIOAPIStream key={e.id} stream={e}/>;
           })}
         </div>
+      </div>
+    )
+  }
+});
+
+
+var NomadApiInterface = React.createClass({
+  cleanStreams: function () {
+    var endpoint = "http://api.nomadlive.tv/streams/clean";
+    this.getURL(endpoint, function (err) {
+      if (!err) {
+        console.log("Project:syncStreams.");
+      }
+    });
+  },
+  syncStreams: function () {
+    var endpoint = "http://api.nomadlive.tv/streams/sync";
+    this.getURL(endpoint, function (err) {
+      if (!err) {
+        console.log("Project:syncStreams.");
+      }
+    });
+  },
+  getURL: function (endpoint, callback) {
+    this.setState({status: 'loading'});
+
+    $.ajax({
+      url: endpoint,
+      dataType: 'json',
+      success: function(data) {
+        this.setState({streams: data, status: 'success'});
+
+        // Executes the callback if present
+        typeof callback === 'function' && callback();
+
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(endpoint, status, err.toString());
+        this.setState({status: 'error'});
+        typeof callback === 'function' && callback(err);
+      }.bind(this),
+    });
+  },
+  getInitialState: function () {
+    return {status: 'iddle', streams: []};
+  },
+  render: function () {
+    return (
+      <div className={"api-interface " + this.props.className}>
+        <button className="action-button" onClick={this.cleanStreams} ref="cleanButton">
+          <i className="fa fa-trash-o"></i>
+        </button>
+        <button className="action-button" onClick={this.syncStreams} ref="syncButton">
+          <i className="fa fa-download"></i>
+        </button>
+        <StatusIndicator status={this.state.status} ref="status"></StatusIndicator>
       </div>
     )
   }
@@ -121,13 +178,16 @@ var SimpleSubmit = React.createClass({
   },
   render: function () {
     return (
-      <div className="project settings center">
+      <div className="settings cine-io-interface">
         <input type="text" size="36" maxLength="32" ref="textfield"
+          className="project-secret-key"
           onKeyUp={this.handleEnterKey}
           placeholder="Project Secret Key"
           defaultValue={this.getProjectSecretKey()} />
-        <button onClick={this.updateContent} ref="submitButton">Refresh</button>
-        <StatusIndicator status={this.state.status} ref="status"></StatusIndicator>
+        <div className="action-button">
+          <button className="action-button" onClick={this.updateContent} ref="submitButton">Refresh</button>
+          <StatusIndicator status={this.state.status} ref="status"></StatusIndicator>
+        </div>
       </div>
     )
   }
