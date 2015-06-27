@@ -29,7 +29,7 @@ var Project = React.createClass({
   render: function () {
     return (
       <div className={"project " + this.props.className}>
-        <div className="project settings">
+        <div className="settings">
           <SimpleSubmit onSubmit={this.fetchWithKey} />
           <NomadApiInterface />
         </div>
@@ -87,10 +87,12 @@ var NomadApiInterface = React.createClass({
   render: function () {
     return (
       <div className={"api-interface " + this.props.className}>
-        <button className="action-button" onClick={this.cleanStreams} ref="cleanButton">
+        <button className="action-button" onClick={this.cleanStreams}
+          title="Clean all streams that haven't been used in the last 15s." ref="cleanButton">
           <i className="fa fa-trash-o"></i>
         </button>
-        <button className="action-button" onClick={this.syncStreams} ref="syncButton">
+        <button className="action-button" onClick={this.syncStreams}
+          title="Fetc all the streams from Cine.IO." ref="syncButton">
           <i className="fa fa-download"></i>
         </button>
         <StatusIndicator status={this.state.status} ref="status"></StatusIndicator>
@@ -178,14 +180,18 @@ var SimpleSubmit = React.createClass({
   },
   render: function () {
     return (
-      <div className="settings cine-io-interface">
+      <div className="cine-io-interface">
         <input type="text" size="36" maxLength="32" ref="textfield"
           className="project-secret-key"
           onKeyUp={this.handleEnterKey}
           placeholder="Project Secret Key"
           defaultValue={this.getProjectSecretKey()} />
+        
         <div className="action-button">
-          <button className="action-button" onClick={this.updateContent} ref="submitButton">Refresh</button>
+          <button className="action-button"
+          onClick={this.updateContent}
+          title="Refresh the stream list."
+          ref="submitButton">Refresh</button>
           <StatusIndicator status={this.state.status} ref="status"></StatusIndicator>
         </div>
       </div>
