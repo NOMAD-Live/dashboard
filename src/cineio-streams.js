@@ -61,7 +61,7 @@ var CineIOAPIStream = React.createClass({
   render: function () {
     var stream = this.props.stream;
     var playOptions = {
-      stretching: 'uniform',
+      stretching: 'fill',
       width: "100%",
       aspectratio: '16:9',
       primary: 'flash',
