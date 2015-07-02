@@ -10,7 +10,7 @@ var Project = React.createClass({
       dataType: 'jsonp',
       data: {secretKey:secretKey.value},
       success: function(data) {
-        
+
         this.setState({streams: data});
 
         // Executes the callback if present
