@@ -256,7 +256,11 @@ var BGUStream = React.createClass({
     if (this.state.enabled) {
       return (
           <div className="bg-video-wrapper">
-            <iframe src="https://www.ustream.tv/embed/18155672?wmode=direct&showtitle=false&autoplay=true&volume=0" className="bg-video-iframe"  webkitallowfullscreen allowFullScreen frameBorder="no" width="100%" height="100%"></iframe>
+            <iframe
+              src="https://www.ustream.tv/embed/18155672?wmode=direct&showtitle=false&autoplay=true&volume=0"
+              className="bg-video-iframe"  webkitallowfullscreen allowFullScreen
+              frameBorder="no" width="100%" height="100%">
+            </iframe>
           </div>
         );
     } else {
