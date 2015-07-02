@@ -4,6 +4,11 @@ var streamId = "554cf071fc71760b00a78aad";
 CineIO.init(CINE_IO_PUBLIC_KEY, {});
 
 React.render(
+  <BGUStream />,
+  document.getElementById('bg-stream')
+);
+
+React.render(
   <Project />,
   document.getElementById('project')
 );

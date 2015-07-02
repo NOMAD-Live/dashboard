@@ -104,6 +104,12 @@ var NomadApiInterface = React.createClass({
   render: function () {
     return (
       <div className={"api-interface " + this.props.className}>
+        
+        <button className="action-button"
+          onClick={this.updateContent}
+          title="Toggle the video player in the background."
+          ref="bgstreamButton">Ustream?</button>
+
         <button className="action-button" onClick={this.cleanStreams}
           title="Clean streams not used in the last 15s." ref="cleanButton">
           <i className="fa fa-trash-o"></i>
@@ -178,6 +184,9 @@ var ProjectSettings = React.createClass({
       clearTimeout(this._interval);
     }
   },
+  toggleUstream: function () {
+    React.findDOMNode(this.refs.bgustream);
+  },
   handleLeave: function () {
     // Clear the timeout for opening the widget
     clearTimeout(this._interval); 
@@ -230,6 +239,32 @@ var ProjectSettings = React.createClass({
     )
   }
 });
+
+
+var BGUStream = React.createClass({
+  toggle: function () {
+    if (this.state.enabled) {
+      this.setState({ enabled: false });
+    } else {
+      this.setState({ enabled: true });
+    }
+  },
+  getInitialState: function() {
+    return { enabled: true };
+  },
+  render: function () {
+    if (this.state.enabled) {
+      return (
+          <div className="bg-video-wrapper">
+            <iframe src="https://www.ustream.tv/embed/18155672?wmode=direct&showtitle=false&autoplay=true" className="bg-video-iframe"  webkitallowfullscreen allowFullScreen frameBorder="no" width="100%" height="100%"></iframe>
+          </div>
+        );
+    } else {
+      return (<div></div>);
+    }
+  }
+});
+
 
 var StatusIndicator = React.createClass({
   getDefaultProps: function() {
