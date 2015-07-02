@@ -10,7 +10,7 @@ var Project = React.createClass({
       dataType: 'jsonp',
       data: {secretKey:secretKey.value},
       success: function(data) {
-        console.log("Project:newStreams.");
+        
         this.setState({streams: data});
 
         // Executes the callback if present
@@ -23,15 +23,21 @@ var Project = React.createClass({
       }.bind(this),
     });
   },
+  componentDidMount: function () {
+    // Initially hide the settings
+    // $('.settings').hide();
+  },
   getInitialState: function () {
     return {secret_key: [], streams: []};
   },
   render: function () {
     return (
       <div className={"project " + this.props.className}>
-        <div className="settings">
-          <SimpleSubmit onSubmit={this.fetchWithKey} />
-          <NomadApiInterface />
+        <div className="settings-wrapper">
+          <div className="settings">
+            <ProjectSettings onSubmit={this.fetchWithKey} />
+            <NomadApiInterface />
+          </div>
         </div>
         <div className={"stream-list " + this.props.className}>
           {this.state.streams.map(function(e) {
@@ -47,62 +53,75 @@ var Project = React.createClass({
 var NomadApiInterface = React.createClass({
   cleanStreams: function () {
     var endpoint = "http://api.nomadlive.tv/streams/clean";
-    this.getURL(endpoint, function (err) {
-      if (!err) {
-        console.log("Project:syncStreams.");
-      }
+    this.getURL(endpoint, function (data) {
+      console.log("NomadAPI:cleanedStreams. " + data);
     });
   },
   syncStreams: function () {
     var endpoint = "http://api.nomadlive.tv/streams/sync";
-    this.getURL(endpoint, function (err) {
-      if (!err) {
-        console.log("Project:syncStreams.");
-      }
+    this.getURL(endpoint, function (data) {
+      console.log("NomadAPI:syncedStreams. " + data);
     });
   },
   getURL: function (endpoint, callback) {
-    this.setState({status: 'loading'});
+    this.setState({
+      status: 'loading',
+      message: 'Getting... ' + endpoint
+    });
 
     $.ajax({
       url: endpoint,
-      dataType: 'json',
       success: function(data) {
-        this.setState({streams: data, status: 'success'});
+
+        // Makes sure data is present
+        data && this.setState({
+          streams: data,
+          status: 'success',
+          message: 'Got ' + data && data.length + ' streams.'
+        });
 
         // Executes the callback if present
-        typeof callback === 'function' && callback();
+        typeof callback === 'function' && callback(data);
 
       }.bind(this),
       error: function(xhr, status, err) {
+
         console.error(endpoint, status, err.toString());
-        this.setState({status: 'error'});
+        
+        this.setState({
+          status: 'error',
+          message: status
+        });
+
+        // Executes the callback if present
         typeof callback === 'function' && callback(err);
       }.bind(this),
     });
   },
   getInitialState: function () {
-    return {status: 'iddle', streams: []};
+    return {status: 'iddle', streams: [], message:''};
   },
   render: function () {
     return (
       <div className={"api-interface " + this.props.className}>
         <button className="action-button" onClick={this.cleanStreams}
-          title="Clean all streams that haven't been used in the last 15s." ref="cleanButton">
+          title="Clean streams not used in the last 15s." ref="cleanButton">
           <i className="fa fa-trash-o"></i>
         </button>
         <button className="action-button" onClick={this.syncStreams}
-          title="Fetc all the streams from Cine.IO." ref="syncButton">
+          title="Fetch streams from Cine.IO." ref="syncButton">
           <i className="fa fa-download"></i>
         </button>
-        <StatusIndicator status={this.state.status} ref="status"></StatusIndicator>
+        <StatusIndicator status={this.state.status}
+          message={this.state.message} ref="status">
+        </StatusIndicator>
       </div>
     )
   }
 });
 
 
-var SimpleSubmit = React.createClass({
+var ProjectSettings = React.createClass({
   getProjectSecretKey: function() {
     // http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
     var local = localStorage.getItem("project_secret_key");
@@ -112,10 +131,14 @@ var SimpleSubmit = React.createClass({
   onUpdateContentDone: function (err) {
     if (err) {
       this.setState({status:'error'});
-      this.setAutoUpdate(false);
+      this.setAutoUpdate(0);
     } else {
-      this.setState({status:'success'});
-      this.setAutoUpdate(true);
+      this.setState({
+        status:'success',
+        message: 'Refreshing every ' + this.state.update_every + 'ms.'
+      });
+
+      this.setAutoUpdate(this.state.update_every);
     }
   },
   handleEnterKey: function (e) {
@@ -124,15 +147,13 @@ var SimpleSubmit = React.createClass({
     }
   },
   updateContent: function (e) {
-    
+
     var text = React.findDOMNode(this.refs.textfield).value.trim();
 
     // Do nothing if no value
-    if (!text) { console.log("SimpleSubmit:noContent"); return; }
-    
-    if (this.props.onSubmit) {
+    if (!text) { console.log("ProjectSettings:noContent"); return; }
 
-      console.log("SimpleSubmit:onSubmit");
+    if (this.props.onSubmit) {
 
       // Shows loading
       this.setState({status:'loading'});
@@ -142,17 +163,16 @@ var SimpleSubmit = React.createClass({
     // Save the item (even if the key is invalid)
     localStorage.setItem("project_secret_key", text);
   },
-  setAutoUpdate: function (value) {
-    var REFRESH_RATE = 5000;
+  setAutoUpdate: function (delay) {
     
-    if (value === true) {
+    if (0 < delay) {
       
       // Do nothing if the interval is already set
       if (this._interval) return;
 
       this._interval = setInterval(function () {
         this.updateContent();
-      }.bind(this), REFRESH_RATE);
+      }.bind(this), delay);
 
     } else {
       clearTimeout(this._interval);
@@ -167,12 +187,16 @@ var SimpleSubmit = React.createClass({
     clearTimeout(this._interval); 
   },
   getInitialState: function() {
-    return {status:'iddle'};
+    return {
+      status:'iddle',
+      message: 'No message.',
+      update_every: 5000
+    };
   },
   componentDidMount: function() {
 
     var text = React.findDOMNode(this.refs.textfield).value.trim();
-    
+
     // Auto update if there is a value in the text field
     if (text) {
       this.updateContent();
@@ -181,19 +205,27 @@ var SimpleSubmit = React.createClass({
   render: function () {
     return (
       <div className="cine-io-interface">
+
         <input type="text" size="36" maxLength="32" ref="textfield"
           className="project-secret-key"
           onKeyUp={this.handleEnterKey}
           placeholder="Project Secret Key"
           defaultValue={this.getProjectSecretKey()} />
-        
+
         <div className="action-button">
+
           <button className="action-button"
-          onClick={this.updateContent}
-          title="Refresh the stream list."
-          ref="submitButton">Refresh</button>
-          <StatusIndicator status={this.state.status} ref="status"></StatusIndicator>
+            onClick={this.updateContent}
+            title="Refresh the stream list."
+            ref="submitButton">Refresh</button>
+
+          <StatusIndicator
+            status={this.state.status}
+            message={this.state.message}
+            ref="status"></StatusIndicator>
+
         </div>
+
       </div>
     )
   }
@@ -216,7 +248,9 @@ var StatusIndicator = React.createClass({
       console.log("StatusIndicator:warning: Injecting empty HTML.");
     }
     return (
-      <div className="status-indicator" dangerouslySetInnerHTML={{__html: html}}>
+      <div className="status-indicator"
+        title={this.props.message}
+        dangerouslySetInnerHTML={{__html: html}}>
       </div>
     )
   }
