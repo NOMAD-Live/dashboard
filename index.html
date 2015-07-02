@@ -26,11 +26,15 @@
   
   <style type="text/css">
   body {
+    background-color: black;
     color: #333;
-    background: url("./img/bg.png") no-repeat fixed center bottom #E9E9E9;
+    /*background: url("./img/bg.png") no-repeat fixed center bottom #E9E9E9;*/
     /*background: url("./img/bg_nomad.jpg") fixed center bottom #E9E9E9;*/
     /*background: url("./img/bg_nomad_top.png") no-repeat fixed center top #E9E9E9;*/
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
+    /*height:100%;*/
+    position: relative;
+    z-index: 1; 
   }
   ul {
     /* Disables default HTML list bullets */
@@ -41,6 +45,9 @@
   .status {
     font-size: 2rem;
     margin:0 .3rem;
+  }
+  .stream-list {
+    margin-top: 80px;
   }
   .stream-item {
     margin:0 .3rem;
@@ -54,14 +61,12 @@
     justify-content: center;
     align-items: center;
   }
-  .project {
+  .project-wrapper {
     position: relative;
-    display: inline-block;
-    margin: 1rem 0;
-    width: 100%;
+    padding: 0;
+    z-index: 2;
   }
-  .settings::after {
-    content: '';
+  .project {
     display: inline-block;
     width: 100%;
   }
@@ -69,6 +74,7 @@
     float: right;
   }
   .status-indicator {
+    color: #C0C0C0;
     float: left;
   }
   .project-secret-key {
@@ -77,12 +83,27 @@
   .action-button {
     float: left;
   }
+  .settings-wrapper {
+    background-color: rgba(250,250,250,0.1);
+    position: absolute;
+    width: 100%;
+  }
+  .settings {
+    display: inline-block;
+    position: relative;
+    padding: 15px;
+    width: 100%;
+  }
   </style>
 </head>
 
 <body>
+  <div style="position: fixed; overflow: hidden; z-index: -99; width: 100%; height: 105%">
+    <iframe src="https://www.ustream.tv/embed/18155672?wmode=direct&showtitle=false" style="border: 0 none transparent;"  webkitallowfullscreen allowfullscreen frameborder="no" width="100%" height="100%"></iframe>
+  </div>
 
-  <div id="project" class="inner container-fluid">
+  <div class="project-wrapper container-fluid">
+    <div id="project"></div>
   </div>
   
   <script type="text/jsx" src="./src/cineio-streams.js"></script>
@@ -91,6 +112,22 @@
   
 
   <script type="text/javascript">
+  var timer;
+  var auto_hide = function () {
+    // Show settings on mousemove 
+    $(window).on('mousemove', function () {
+      $('.settings').fadeIn();
+      try {
+        clearTimeout(timer);
+      } catch (e) {
+      }
+      timer = setTimeout(function () {
+        $('.settings').fadeOut();
+      }, 1000);
+    });
+  }
+
+  $('.settings').fadeIn();
 
   // Is not accessible within the 
   // javascriptCallbackFunction scope.
