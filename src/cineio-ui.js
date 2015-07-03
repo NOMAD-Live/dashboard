@@ -32,14 +32,14 @@ var Project = React.createClass({
   },
   render: function () {
     return (
-      <div className={"project " + this.props.className}>
+      <div className={"project"}>
         <div className="settings-wrapper">
           <div className="settings">
             <ProjectSettings onSubmit={this.fetchWithKey} />
             <NomadApiInterface />
           </div>
         </div>
-        <div className={"stream-list " + this.props.className}>
+        <div className={"stream-list"}>
           {this.state.streams.map(function(e) {
              return <CineIOAPIStream key={e.id} stream={e}/>;
           })}
@@ -73,11 +73,13 @@ var NomadApiInterface = React.createClass({
       url: endpoint,
       success: function(data) {
 
-        // Makes sure data is present
-        data && this.setState({
+        var count = data ? data.length : 0;
+
+        // Report how much streams we got.
+        this.setState({
           streams: data,
           status: 'success',
-          message: 'Got ' + data && data.length + ' streams.'
+          message: 'Got ' + count + ' streams.'
         });
 
         // Executes the callback if present
@@ -87,8 +89,9 @@ var NomadApiInterface = React.createClass({
       error: function(xhr, status, err) {
 
         console.error(endpoint, status, err.toString());
-        
+
         this.setState({
+          streams: [],
           status: 'error',
           message: status
         });
@@ -99,12 +102,12 @@ var NomadApiInterface = React.createClass({
     });
   },
   getInitialState: function () {
-    return {status: 'iddle', streams: [], message:''};
+    return {status: 'iddle', streams: [], message:'No message'};
   },
   render: function () {
     return (
-      <div className={"api-interface " + this.props.className}>
-        
+      <div className={"api-interface"}>
+
         <button className="action-button"
           onClick={this.updateContent}
           title="Toggle the video player in the background."
@@ -126,8 +129,14 @@ var NomadApiInterface = React.createClass({
   }
 });
 
-
+/**
+ * Handles the top settings bar on the screen.
+ */
 var ProjectSettings = React.createClass({
+  /**
+   * Loads the project_secret_key from first the url parameter,
+   * then the local storage. If none is present, just leave it empty. 
+   */
   getProjectSecretKey: function() {
     // http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
     var local = localStorage.getItem("project_secret_key");
@@ -147,33 +156,48 @@ var ProjectSettings = React.createClass({
       this.setAutoUpdate(this.state.update_every);
     }
   },
+  /**
+   * Allows to refresh using the enter key.
+   */
   handleEnterKey: function (e) {
     if (e && e.keyCode == 13) {
       React.findDOMNode(this.refs.submitButton).click();
     }
   },
+  /**
+   * Loads the project_secret_key from first the url parameter,
+   * then the local storage. If none is present, just leave it empty. 
+   */
   updateContent: function (e) {
 
     var text = React.findDOMNode(this.refs.textfield).value.trim();
 
     // Do nothing if no value
-    if (!text) { console.log("ProjectSettings:noContent"); return; }
+    if (!text) {
+      console.log("ProjectSettings:noContent");
+      return;
+    }
+
+    // Shows loading
+    this.setState({status:'loading'});
 
     if (this.props.onSubmit) {
 
-      // Shows loading
-      this.setState({status:'loading'});
       this.props.onSubmit({value: text}, this.onUpdateContentDone);
     }
 
     // Save the item (even if the key is invalid)
     localStorage.setItem("project_secret_key", text);
   },
+  /**
+   * Makes sure there is just one timer that auto-updates.
+   * If the delay is zero, it will disable the auto-update mechanism.
+   */
   setAutoUpdate: function (delay) {
     
     if (0 < delay) {
-      
-      // Do nothing if the interval is already set
+
+      // Do nothing if the interval is already set.
       if (this._interval) return;
 
       this._interval = setInterval(function () {
@@ -181,18 +205,12 @@ var ProjectSettings = React.createClass({
       }.bind(this), delay);
 
     } else {
+      // We should stop auto-updating.
       clearTimeout(this._interval);
     }
   },
-  toggleUstream: function () {
-    React.findDOMNode(this.refs.bgustream);
-  },
-  handleLeave: function () {
-    // Clear the timeout for opening the widget
-    clearTimeout(this._interval); 
-  },
   componentWillUnmount: function(){
-    // Clear the timeout when the component unmounts
+    // Clears the timeout when the component unmounts.
     clearTimeout(this._interval); 
   },
   getInitialState: function() {
@@ -270,6 +288,10 @@ var BGUStream = React.createClass({
 });
 
 
+/**
+ * A user friendly feedback to the user.
+ * Uses exclusively icones and displays more information on hover.
+ */
 var StatusIndicator = React.createClass({
   getDefaultProps: function() {
     return {
@@ -287,8 +309,7 @@ var StatusIndicator = React.createClass({
       console.log("StatusIndicator:warning: Injecting empty HTML.");
     }
     return (
-      <div className="status-indicator"
-        title={this.props.message}
+      <div className="status-indicator" title={this.props.message}
         dangerouslySetInnerHTML={{__html: html}}>
       </div>
     )
