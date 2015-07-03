@@ -1,26 +1,16 @@
-[![Stories in Ready](https://badge.waffle.io/NOMAD-Live/dashboard.png?label=ready&title=Ready)](https://waffle.io/NOMAD-Live/dashboard)
 `dashboard`
 ===========
+[![Stories in Ready](https://badge.waffle.io/NOMAD-Live/dashboard.png?label=ready&title=Ready)](https://waffle.io/NOMAD-Live/dashboard)
+
+[![Main Page Screenshot](./screenshots/main-page.png)](http://nomad-live.github.io/dashboard/)
 
 You can access the dashboard at http://nomad-live.github.io/dashboard/
 
 
-### ~~How To Run~~ (Switched to Cine.IO)
+### Usage
 
-Create a secrets.json file with the correct credentials from kickflip.io (those won't work) :
+- Create yourself an account on Cine.IO.
+- Enter the `PROJECT_SECRET_KEY` in the top right of the screen.
+- Press on the `Refresh` button.
 
-```json
-{
-	"KICKFLIP_CLIENT_ID" : "_YPOGaq7!ge2UT30h8ECKFyB45h6k;dPH-4qqw6d",
-	"KICKFLIP_CLIENT_SECRET" : "-@YHm0TKVC60f-jTwz0jFBgupaXAzfE_fJQz@ko7dwTVKeMmD-DhE.C!TzqemN.==.6tj2pId6o1fiSxjoWAmt2@ImBg7MZOuENx8H:D!4rI3t;3dfWL3BpA6Ow.TkJv"
-}
-```
-
-Then run the server with `python server.py`.
-
-
-It will redirect all requests as such:
-```
-localhost:8000/api/<path>     --> https://kickflip.io/api/1.1/<path>
-localhost:8000/<path>         --> localhost:8000/public_html/<path>
-```
+Your Cine.IO streams will start appearing on the screen.
