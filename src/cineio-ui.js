@@ -105,13 +105,13 @@ var NomadApiInterface = React.createClass({
     return {status: 'iddle', streams: [], message:'No message'};
   },
   render: function () {
+
+        // <button className="action-button"
+        //   onClick={this.updateContent}
+        //   title="Toggle the video player in the background."
+        //   ref="bgstreamButton">Ustream?</button>
     return (
       <div className={"api-interface"}>
-
-        <button className="action-button"
-          onClick={this.updateContent}
-          title="Toggle the video player in the background."
-          ref="bgstreamButton">Ustream?</button>
 
         <button className="action-button" onClick={this.cleanStreams}
           title="Clean streams not used in the last 15s." ref="cleanButton">
