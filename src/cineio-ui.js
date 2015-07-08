@@ -260,18 +260,27 @@ var ProjectSettings = React.createClass({
 
 
 var BGUStream = React.createClass({
-  toggle: function () {
+  toggle: function (new_engine) {
+
+    var e = new_engine || this.state.engine;
+
     if (this.state.enabled) {
-      this.setState({ enabled: false });
+      this.setState({ enabled: false, engine: e });
     } else {
-      this.setState({ enabled: true });
+      this.setState({ enabled: true, engine: e });
     }
   },
   getInitialState: function() {
-    return { enabled: true };
+    return { enabled: true, engine: 'videojs' };
   },
   render: function () {
-    if (this.state.enabled) {
+    
+    // If disabled, returns an empty div.
+    if (!this.state.enabled) {
+      return (<div></div>);
+    }
+
+    if (this.state.engine === 'ustream') {
       return (
           <div className="bg-video-wrapper">
             <iframe
@@ -281,8 +290,18 @@ var BGUStream = React.createClass({
             </iframe>
           </div>
         );
-    } else {
-      return (<div></div>);
+    }
+
+    if (this.state.engine === 'videojs') {
+      return (
+          <div className="bg-video-wrapper">
+          <video
+            id="example_video_1" className="video-js vjs-default-skin"
+            controls preload="none" width="100%" height="100%" poster="./nomad.png">
+            <source src="rtmp://stream.nomadlive.tv/live/test" type='rtmp/mp4' />
+          </video>
+          </div>
+        );
     }
   }
 });
