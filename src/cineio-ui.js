@@ -271,7 +271,7 @@ var BGUStream = React.createClass({
     }
   },
   getInitialState: function() {
-    return { enabled: true, engine: 'videojs' };
+    return { enabled: true, engine: 'ustream' };
   },
   render: function () {
     
@@ -279,12 +279,12 @@ var BGUStream = React.createClass({
     if (!this.state.enabled) {
       return (<div></div>);
     }
-
+    // Main "https://www.ustream.tv/embed/18155672?wmode=direct&showtitle=false&autoplay=true&volume=0"
     if (this.state.engine === 'ustream') {
       return (
           <div className="bg-video-wrapper">
             <iframe
-              src="https://www.ustream.tv/embed/18155672?wmode=direct&showtitle=false&autoplay=true&volume=0"
+              src="https://www.ustream.tv/embed/18439699?wmode=direct&showtitle=false&autoplay=true&volume=0"
               className="bg-video-iframe"  webkitallowfullscreen allowFullScreen
               frameBorder="no" width="100%" height="100%">
             </iframe>
@@ -297,7 +297,8 @@ var BGUStream = React.createClass({
           <div className="bg-video-wrapper">
           <video
             id="example_video_1" className="video-js vjs-default-skin"
-            controls preload="none" width="100%" height="100%" poster="./nomad.png">
+            controls autoPlay preload="none" width="100%" height="100%">
+            <source src="http://stream.nomadlive.tv/hls/test.m3u8" type='application/x-mpegURL' />
             <source src="rtmp://stream.nomadlive.tv/live/test" type='rtmp/mp4' />
           </video>
           </div>
